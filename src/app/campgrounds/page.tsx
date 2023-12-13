@@ -1,11 +1,15 @@
-import dbConnect from "@/lib/dbConnect"
-import Campground, { Campgrounds } from "@/models/Campground";
+import { Campgrounds } from "@/models/Campground";
 import Link from "next/link";
 
 async function Page() {
 
-    await dbConnect();
-    const campgrouds: Campgrounds[] = await Campground.find({});
+    const res = await fetch(`http://localhost:3000/api/campgrounds`, {cache: 'no-store'});
+    const response = await res.json();
+    if (!response.success) {
+        throw new Error(response.message);
+    }
+
+    const campgrouds: Campgrounds[] = await response.data;
 
     return (
         <div>

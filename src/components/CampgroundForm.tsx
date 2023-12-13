@@ -1,4 +1,6 @@
 "use client";
+import { Campgrounds } from "@/models/Campground";
+import { useRouter } from "next/navigation";
 import { useState } from "react"
 
 interface FormData {
@@ -11,10 +13,13 @@ interface FormData {
 
 type Props = {
     formData: FormData,
-    newCampground: boolean
+    newCampground: boolean, 
+    campgroundId?: string
 }
 
-function CampgroundForm({ formData, newCampground }: Props) {
+function CampgroundForm({ formData, newCampground, campgroundId }: Props) {
+
+    const router = useRouter();
 
     const [form, setForm] = useState({
         title: formData.title, 
@@ -35,13 +40,46 @@ function CampgroundForm({ formData, newCampground }: Props) {
         })
     }
 
-    const handleSubmit = (e: any) => {
+    const postData = async () => {
+        const res = await fetch(`http://localhost:3000/api/campgrounds`, {
+            method: 'POST', 
+            headers: {
+                'Accept': 'appliaction/json',
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify(form)
+        })
+        const response = await res.json();
+        if (!response.success) {
+            throw new Error(response.message);
+        }
+        return response.data;
+    }
+
+    const putData = async () => {
+        const res = await fetch(`http://localhost:3000/api/campgrounds/${campgroundId}`, {
+            method: 'PUT', 
+            headers: {
+                'Accept': 'appliaction/json',
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify(form)
+        })
+        const response = await res.json();
+        if (!response.success) {
+            throw new Error(response.message);
+        }
+        return response.data;
+    }
+
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         if (!e.target.checkValidity()) {
             e.target.classList.add('was-validated');
             return;
         }
-        console.log(form);
+        const campground: Campgrounds = newCampground ? await postData() : await putData();
+        router.push(`/campgrounds/${campground._id}`);
     }
 
     return (

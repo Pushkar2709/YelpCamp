@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Script from 'next/script'
 import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,11 +22,12 @@ export default function RootLayout({
 			<head>
 				<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossOrigin='anonymous' />
 			</head>
-			<body className={inter.className}>
+			<body className={`${inter.className} d-flex flex-column vh-100`}>
 				<Navbar/>
-				<div className="container mt-5">
+				<div className="flex-fill container mt-5">
 					{children}
 				</div>
+				<Footer/>
 			</body>
 			<Script src='https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js' />
 			<Script src='https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js' />
