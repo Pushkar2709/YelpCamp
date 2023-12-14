@@ -17,7 +17,7 @@ type Props = {
     campgroundId?: string
 }
 
-function CampgroundForm({ formData, newCampground, campgroundId }: Props) {
+function Form({ formData, newCampground, campgroundId }: Props) {
 
     const router = useRouter();
 
@@ -49,11 +49,12 @@ function CampgroundForm({ formData, newCampground, campgroundId }: Props) {
             }, 
             body: JSON.stringify(form)
         })
-        const response = await res.json();
-        if (!response.success) {
-            throw new Error(response.message);
+        const {success, message, data} = await res.json();
+        if (!success) {
+            throw new Error(message);
         }
-        return response.data;
+        const campground: Campgrounds = data;
+        router.push(`/campgrounds/${campground._id}`);
     }
 
     const putData = async () => {
@@ -65,11 +66,12 @@ function CampgroundForm({ formData, newCampground, campgroundId }: Props) {
             }, 
             body: JSON.stringify(form)
         })
-        const response = await res.json();
-        if (!response.success) {
-            throw new Error(response.message);
+        const {success, message, data} = await res.json();
+        if (!success) {
+            throw new Error(message);
         }
-        return response.data;
+        const campground: Campgrounds = data;
+        router.push(`/campgrounds/${campground._id}`);
     }
 
     const handleSubmit = async (e: any) => {
@@ -78,8 +80,7 @@ function CampgroundForm({ formData, newCampground, campgroundId }: Props) {
             e.target.classList.add('was-validated');
             return;
         }
-        const campground: Campgrounds = newCampground ? await postData() : await putData();
-        router.push(`/campgrounds/${campground._id}`);
+        newCampground ? postData() : putData();
     }
 
     return (
@@ -129,4 +130,4 @@ function CampgroundForm({ formData, newCampground, campgroundId }: Props) {
     )
 }
 
-export default CampgroundForm
+export default Form

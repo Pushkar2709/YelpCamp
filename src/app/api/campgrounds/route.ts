@@ -2,7 +2,7 @@ import dbConnect from "@/lib/dbConnect";
 import Campground from "@/models/Campground";
 import { NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
     try {
         await dbConnect();
         const campgrounds = await Campground.find({});

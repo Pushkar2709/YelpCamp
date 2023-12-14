@@ -1,4 +1,4 @@
-import CampgroundForm from "@/components/CampgroundForm"
+import Form from "@/components/Form"
 
 function Page() {
 
@@ -15,7 +15,7 @@ function Page() {
             <h1 className="text-center">New Campground!</h1>
             <div className="row">
                 <div className="col-6 offset-3">
-                    <CampgroundForm formData={formData} newCampground />
+                    <Form formData={formData} newCampground />
                 </div>
             </div>
         </div>

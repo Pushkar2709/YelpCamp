@@ -1,6 +1,12 @@
+import { options } from "@/app/api/auth/[...nextauth]/options"
+import { getServerSession } from "next-auth"
 import Link from "next/link"
+import LogOut from "./LogOut";
 
-function Navbar() {
+async function Navbar() {
+
+    const session = await getServerSession(options);
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
             <div className="container-fluid">
@@ -10,10 +16,20 @@ function Navbar() {
                 </button>
                 <div className="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
                     <div className="navbar-nav">
-                        <Link href={`/`} className="nav-link">Home</Link>
-                        <Link href={`/campgrounds`} className="nav-link">Campgrounds</Link>
-                        <Link href={`/campgrounds/new`} className="nav-link">New Campground</Link>
+                        <Link href={`/`} className="btn btn-dark">Home</Link>
+                        <Link href={`/campgrounds`} className="btn btn-dark">Campgrounds</Link>
+                        <Link href={`/campgrounds/new`} className="btn btn-dark">New Campground</Link>
                     </div>
+                    {
+                        session
+                            ? <div className="navbar-nav">
+                                <span className="btn btn-dark">{session.user?.email}</span>
+                                <button className="btn btn-dark"><LogOut /></button>
+                            </div>
+                            : <div className="navbar-nav">
+                                <Link href={`/api/auth/signin`} className="btn btn-dark">Login</Link>
+                            </div>
+                    }
                 </div>
             </div>
         </nav>

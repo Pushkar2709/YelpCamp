@@ -3,13 +3,15 @@ import Link from "next/link";
 
 async function Page() {
 
-    const res = await fetch(`http://localhost:3000/api/campgrounds`, {cache: 'no-store'});
-    const response = await res.json();
-    if (!response.success) {
-        throw new Error(response.message);
+    const res = await fetch(`http://localhost:3000/api/campgrounds`, {
+        cache: 'no-store', 
+        credentials: 'include'
+    });
+    const {success, message, data} = await res.json();
+    if (!success) {
+        throw new Error(message);
     }
-
-    const campgrouds: Campgrounds[] = await response.data;
+    const campgrouds: Campgrounds[] = data;
 
     return (
         <div>

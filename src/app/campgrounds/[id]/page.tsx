@@ -1,15 +1,18 @@
+import Delete from "@/components/Delete";
 import { Campgrounds } from "@/models/Campground";
 import Link from "next/link";
 
 async function Page({ params }: { params: { id: string } }) {
 
-    const res = await fetch(`http://localhost:3000/api/campgrounds/${params.id}`, {cache: 'no-store'});
-    const response = await res.json();
-    if (!response.success) {
-        throw new Error(response.message);
+    const res = await fetch(`http://localhost:3000/api/campgrounds/${params.id}`, {
+        cache: 'no-store', 
+        credentials: 'include'
+    });
+    const {success, message, data} = await res.json();
+    if (!success) {
+        throw new Error(message);
     }
-
-    const campground: Campgrounds = response.data;
+    const campground: Campgrounds = data;
 
     return (
         <div className="row">
@@ -32,9 +35,9 @@ function Card({ campground }: { campground: Campgrounds }) {
                 <li className="list-group-item text-muted">{campground.location}</li>
                 <li className="list-group-item">${campground.price}/night</li>
             </ul>
-            <div className="card-body">
+            <div className="card-body d-flex justify-content-between">
                 <Link className="card-link btn btn-info" href={`/campgrounds/${campground._id}/edit`}>Edit</Link>
-                {/* <Link className="card-link btn btn-danger" href={`/campgrounds`} onClick={handleDelete}>Delete</Link> */}
+                <Delete campgroundId={campground._id} />
             </div>
         </div>
     )

@@ -23,11 +23,11 @@ export default function RootLayout({
 				<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossOrigin='anonymous' />
 			</head>
 			<body className={`${inter.className} d-flex flex-column vh-100`}>
-				<Navbar/>
+				<Navbar />
 				<div className="flex-fill container mt-5">
 					{children}
 				</div>
-				<Footer/>
+				<Footer />
 			</body>
 			<Script src='https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js' />
 			<Script src='https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js' />

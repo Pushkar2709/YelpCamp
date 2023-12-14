@@ -25,3 +25,13 @@ export async function PUT(req: NextRequest, {params}: {params: {id: string}}) {
         return Response.json({success: false, message: "Error in updating Campground"});
     }
 }
+
+export async function DELETE(req: NextRequest, {params}: {params: {id: string}}) {
+    try {
+        await dbConnect();
+        await Campground.findByIdAndDelete(params.id);
+        return Response.json({success: true});
+    } catch(error) {
+        return Response.json({success: false, message: "Error in deleting Campground"});
+    }
+}
