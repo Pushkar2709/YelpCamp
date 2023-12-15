@@ -1,5 +1,5 @@
-import User from '@/models/User'
-import { AuthenticationResult, PassportLocalModel } from 'mongoose'
+import User, { Users } from '@/models/User'
+import { PassportLocalModel } from 'mongoose'
 import type {NextAuthOptions} from 'next-auth'
 import CredentialsProvider from "next-auth/providers/credentials"
 
@@ -22,7 +22,7 @@ export const options: NextAuthOptions = {
             async authorize(credentials, req) {
 
                 if (credentials) {
-                    const res = await (User as PassportLocalModel<Document>).authenticate()(credentials?.username, credentials?.password);
+                    const res = await (User as PassportLocalModel<Users>).authenticate()(credentials?.username, credentials?.password);
                     if (res.user) {
                         return res.user;
                     }

@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 export async function GET(req: NextRequest, {params}: {params: {id: string}}) {
     try {
         await dbConnect();
-        const campground = await Campground.findById(params.id);
+        const campground = await Campground.findById(params.id).populate('owner');
         if (!campground) {
             return Response.json({success: false, message: "Campground Not Found"});
         }

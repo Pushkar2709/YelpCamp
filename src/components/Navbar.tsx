@@ -23,11 +23,12 @@ async function Navbar() {
                     {
                         session
                             ? <div className="navbar-nav">
-                                <span className="btn btn-dark">{session.user?.email}</span>
+                                <span className="btn btn-dark">{session.user?.name}</span>
                                 <button className="btn btn-dark"><LogOut /></button>
                             </div>
                             : <div className="navbar-nav">
                                 <Link href={`/api/auth/signin`} className="btn btn-dark">Login</Link>
+                                <Link href={`/register`} className="btn btn-dark">Register</Link>
                             </div>
                     }
                 </div>
