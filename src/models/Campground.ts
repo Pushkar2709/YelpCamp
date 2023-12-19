@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { Users } from "./User";
+import User, { Users } from "./User";
+import Review, { Reviews } from "./Review";
 
 export interface Campgrounds extends mongoose.Document {
     title: string, 
@@ -7,7 +8,8 @@ export interface Campgrounds extends mongoose.Document {
     price: number, 
     description: string, 
     location: string, 
-    owner: Users
+    owner: Users, 
+    reviews: [Reviews]
 }
 
 const CampgroundSchema = new mongoose.Schema({
@@ -18,8 +20,12 @@ const CampgroundSchema = new mongoose.Schema({
     location: String, 
     owner: {
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User'
-    }
+        ref: User
+    }, 
+    reviews: [{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: Review
+    }]
 })
 
 export default mongoose.models.Campground || mongoose.model('Campground', CampgroundSchema)

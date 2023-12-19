@@ -1,14 +1,15 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import Delete from "@/components/Delete";
+import ReviewForm from "@/components/ReviewForm";
 import { Campgrounds } from "@/models/Campground";
+import { Reviews } from "@/models/Review";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 
 export default async function Page({ params }: { params: { id: string } }) {
 
     const res = await fetch(`http://localhost:3000/api/campgrounds/${params.id}`, {
-        cache: 'no-store',
-        credentials: 'include'
+        cache: 'no-store'
     });
     const { success, message, data } = await res.json();
     if (!success) {
@@ -18,9 +19,15 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <div className="row">
-            <div className="col-6 offset-3">
+            <div className="col-6">
                 {/* <Link href={`/campgrounds`} className="btn btn-sm" >&lt;Back</Link> */}
                 <Card campground={campground} />
+            </div>
+            <div className="col-6">
+                <ReviewForm campgroundId={params.id} />
+                {
+                    campground.reviews.map(review => <Review key={review._id} review={review} />)
+                }
             </div>
         </div>
     )
@@ -49,6 +56,16 @@ async function Card({ campground }: { campground: Campgrounds }) {
                     <Delete campgroundId={campground._id} />
                 </div>
             }
+        </div>
+    )
+}
+
+function Review({ review }: { review: Reviews }) {
+    return (
+        <div>
+            <p>Review</p>
+            <p>{review.rating}</p>
+            <p>{review.body}</p>
         </div>
     )
 }

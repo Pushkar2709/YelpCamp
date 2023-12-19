@@ -4,8 +4,7 @@ import Link from "next/link";
 async function Page() {
 
     const res = await fetch(`http://localhost:3000/api/campgrounds`, {
-        cache: 'no-store', 
-        credentials: 'include'
+        cache: 'no-store'
     });
     const {success, message, data} = await res.json();
     if (!success) {
