@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
         const campground: Campgrounds = await Campground.create(data);
         const user = await User.findOne({email: userEmail});
         campground.owner = user;
-        campground.save();
+        await campground.save();
         return Response.json({success: true, data: campground});
     } catch(error) {
         return Response.json({success: false, message: "Error in creating new Campground"});

@@ -1,5 +1,6 @@
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import Delete from "@/components/Delete";
+import DeleteReview from "@/components/DeleteReview";
 import ReviewForm from "@/components/ReviewForm";
 import { Campgrounds } from "@/models/Campground";
 import { Reviews } from "@/models/Review";
@@ -19,14 +20,14 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     return (
         <div className="row">
-            <div className="col-6">
+            <div className="col-7">
                 {/* <Link href={`/campgrounds`} className="btn btn-sm" >&lt;Back</Link> */}
                 <Card campground={campground} />
             </div>
-            <div className="col-6">
+            <div className="col-5">
                 <ReviewForm campgroundId={params.id} />
                 {
-                    campground.reviews.map(review => <Review key={review._id} review={review} />)
+                    campground.reviews.map(review => <Review key={review._id} review={review} campgroundId={campground._id} />)
                 }
             </div>
         </div>
@@ -60,12 +61,21 @@ async function Card({ campground }: { campground: Campgrounds }) {
     )
 }
 
-function Review({ review }: { review: Reviews }) {
+async function Review({ review, campgroundId }: { review: Reviews, campgroundId: string }) {
+
+    const session = await getServerSession(options);
+
     return (
-        <div>
-            <p>Review</p>
-            <p>{review.rating}</p>
-            <p>{review.body}</p>
+        <div className="card mb-3">
+            <div className="card-body">
+                <div className="card-title">{review.author.name}</div>
+                <p className="starability-result" data-rating={review.rating}></p>
+                <p className="card-text">{review.body}</p>
+                {
+                    session?.user?.email === review.author.email &&
+                    <DeleteReview reviewId={review._id} campgroundId={campgroundId} />
+                }
+            </div>
         </div>
     )
 }

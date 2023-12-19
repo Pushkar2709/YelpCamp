@@ -3,11 +3,17 @@ import Campground from "@/models/Campground";
 import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 import { options } from "../../auth/[...nextauth]/options";
+import Review from "@/models/Review";
 
 export async function GET(req: NextRequest, {params}: {params: {id: string}}) {
     try {
         await dbConnect();
-        const campground = await Campground.findById(params.id).populate('owner').populate('reviews');
+        const campground = await Campground.findById(params.id).populate('owner').populate({
+            path: 'reviews', 
+            populate: {
+                path: 'author'
+            }
+        });
         if (!campground) {
             return Response.json({success: false, message: "Campground Not Found"});
         }
@@ -40,6 +46,10 @@ export async function DELETE(req: NextRequest, {params}: {params: {id: string}})
     }
     try {
         await dbConnect();
+        const campground = await Campground.findById(params.id);
+        campground.reviews.forEach(async (reviewId: string) => {
+            await Review.findByIdAndDelete(reviewId);
+        })
         await Campground.findByIdAndDelete(params.id);
         return Response.json({success: true});
     } catch(error) {

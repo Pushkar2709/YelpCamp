@@ -40,6 +40,10 @@ export default function ReviewForm({campgroundId}: {campgroundId: string}) {
         if (!success) {
             throw new Error(message);
         }
+        setForm({
+            rating: 1, 
+            body: ""
+        })
         router.refresh();
     }
 
